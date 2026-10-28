@@ -228,8 +228,12 @@ _STORE_PATTERNS = {
         ('id="tp_price_block_total_price', r'<span class="a-offscreen">([^<]{1,40})</span>'),
         ('id="priceblock_ourprice"', r'^[^>]{0,200}>([^<]{1,40})<'),
     ],
-    "newegg.": [  # $<strong>220</strong><sup>.00</sup>; the first one is the item's buy box
-        ('class="price-current',
+    "newegg.": [  # the item's buy box ($<strong>220</strong><sup>.00</sup>); add-on products' prices come earlier
+        ('class="product-buy-box',
+         r'class="price-current[^"]{0,20}"[^>]{0,100}>(?:\s*<span[^>]{0,100}></span>)?\s*([$]?)\s*<strong>([\d,]{1,12})'
+         r'</strong>\s*<sup>(\.\d{1,2})?</sup>'),
+        ('"FinalPrice":', r'^([\d.]{1,12}),"Instock"'),  # the item's own record in the page data
+        ('class="price-current',  # simpler pages without either: the first price shown
          r'^[^>]{0,100}>(?:\s*<span[^>]{0,100}></span>)?\s*([$]?)\s*<strong>([\d,]{1,12})</strong>\s*<sup>(\.\d{1,2})?</sup>'),
     ],
     "ebay.": [
